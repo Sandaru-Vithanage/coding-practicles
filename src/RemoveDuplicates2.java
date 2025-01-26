@@ -1,5 +1,5 @@
 public class RemoveDuplicates2 {
-    class Solution {
+
         public int removeDuplicates(int[] nums) {
             int counter = 2;
             for(int i=2;i < nums.length; i++){
@@ -11,4 +11,4 @@ public class RemoveDuplicates2 {
             return counter;
         }
     }
-}
+
