@@ -3,6 +3,7 @@ import Exceptions.ShopClosedException;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Thread-safe implementation of a coffee shop ordering system.
@@ -18,7 +19,6 @@ public class CoffeeShop {
     private final int capacity;
     // Flag to track if shop is open for new orders
     private volatile boolean isOpen;
-
     /**
      * Initializes a new coffee shop with specified queue capacity.
      *
@@ -50,6 +50,23 @@ public class CoffeeShop {
             throw new ShopClosedException("Cannot place order - shop is closed");
         }
 
+        synchronized (this) {
+            // Wait while queue is full and shop is open
+            while (orderQueue.size() == capacity && isOpen) {
+                System.out.println("Baristas are busy " + order + " waiting to be placed");
+                wait(); // Release lock and wait
+            }
+
+            // Recheck shop status after waiting
+            if (!isOpen) {
+                throw new ShopClosedException("Cannot place order - shop closed while waiting");
+            }
+
+            // Add order to queue
+            orderQueue.offer(order);
+            System.out.println(order + " has been placed");
+            notifyAll(); // Notify waiting baristas
+        }
         // Wait while queue is full and shop is open
         while (orderQueue.size() == capacity && isOpen) {
             System.out.println("Baristas are busy " + order + " waiting to be placed");
@@ -65,7 +82,7 @@ public class CoffeeShop {
         orderQueue.offer(order);
         System.out.println(order + " has been placed");
         notifyAll(); // Notify waiting baristas
-    }
+    }    }
 
     /**
      * Retrieves and removes the next order from the queue for processing.
@@ -74,6 +91,27 @@ public class CoffeeShop {
      * @return The next order to process, or null if shop is closed and queue is empty
      * @throws InterruptedException if the thread is interrupted while waiting
      */
+
+    public  String prepareOrder() throws InterruptedException {
+        // Wait while queue is empty and shop is open
+        synchronized (this) {
+            while (orderQueue.isEmpty() && isOpen) {
+                System.out.println("CoffeeShop is not busy " + Thread.currentThread().getName() + " waiting for orders");
+                wait(); // Release lock and wait
+            }
+
+            // Check if shop is closed and no more orders to process
+            if (!isOpen && orderQueue.isEmpty()) {
+                System.out.println("Shop closed and no more orders to process");
+                return null;
+            }
+
+            // Remove and return next order
+            String order = orderQueue.poll();
+            System.out.println(Thread.currentThread().getName() + " took " + order + " for preparation");
+            notifyAll(); // Notify waiting customers
+            return order;
+        }
     public synchronized String prepareOrder() throws InterruptedException {
         // Wait while queue is empty and shop is open
         while (orderQueue.isEmpty() && isOpen) {
@@ -92,6 +130,7 @@ public class CoffeeShop {
         System.out.println(Thread.currentThread().getName() + " took " + order + " for preparation");
         notifyAll(); // Notify waiting customers
         return order;
+
     }
 
     /**
