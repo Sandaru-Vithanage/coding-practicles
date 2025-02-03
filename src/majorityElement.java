@@ -1,3 +1,4 @@
+//Boyer-Moore voting Algorithm
 public class majorityElement {
     public int majorityElemen(int[] nums) {
         int count = 0;
