@@ -52,3 +52,43 @@ You are given the root of a binary tree that consists of exactly 3 nodes: the ro
 //        return false;
 //    }
 //}
+
+/**
+ * This class provides a method to check if the value of the root node is equal to the sum of its two children.
+ */
+ class RootSumChildrenGraph {
+
+    /**
+     * Definition for a binary tree node.
+     */
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {}
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /**
+     * Checks if the value of the root node is equal to the sum of its two children.
+     *
+     * @param root the root of the binary tree
+     * @return true if the value of the root is equal to the sum of its two children, false otherwise
+     */
+    public boolean checkTree(TreeNode root) {
+        if (root == null || root.left == null || root.right == null) {
+            return false;
+        }
+        return root.val == root.left.val + root.right.val;
+    }
+}
