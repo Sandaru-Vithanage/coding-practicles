@@ -9,7 +9,7 @@ public class RemoveElement {
                     k++;
                 }
             }
-            return k; // Return the number of valid elements
+            return k;
         }
     }
 }
