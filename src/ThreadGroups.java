@@ -16,7 +16,6 @@ public class ThreadGroups {
             for (int i = 0; i <= 10; i++) {
                 System.out.println(Thread.currentThread().getName()+" "+i);
             }
-            //run method ends here when you use lambda function
         }, "Thread 1");
 
         Thread t2 = new Thread(threadGroup1, () -> {
