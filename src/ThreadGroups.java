@@ -59,8 +59,6 @@ public class ThreadGroups {
         t1.start();
         t2.start();
 
-        //continue on this
-
        Thread [] threads = new Thread[Thread.currentThread().getThreadGroup().activeCount()*2];
        ThreadGroup[] threadGroups = new ThreadGroup[Thread.currentThread().getThreadGroup().activeGroupCount()*2];
 
