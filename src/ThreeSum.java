@@ -21,6 +21,6 @@ public class ThreeSum {
                 {7, 8, 9}
         };
         int[] result = {1,2,3,4};
-            System.out.println();
+            System.out.println("Hello");
         }
 }
